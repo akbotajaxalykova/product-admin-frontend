@@ -4,8 +4,8 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
 import { AppDispatch, RootState } from '../../store/index';
-import { fetchProductsAsync } from '../../store/productsAction';
 import ProductItem from './ProductItem';
+import { fetchProductsAsync } from '../../store/actions/productsAction';
 
 const Products = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -30,8 +30,8 @@ const Products = () => {
             <Grid container direction='row' spacing={2}>
                 {products.map(product => (
                     <ProductItem
-                        key={product.id}
-                        id={product.id}
+                        key={product._id}
+                        id={product._id}
                         title={product.title}
                         price={product.price}
                         image={product.image}

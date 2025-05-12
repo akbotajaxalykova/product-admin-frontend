@@ -1,7 +1,7 @@
 import axios from 'axios';
-import axiosApi from '../axiosApi';
-import { AppDispatch } from './index';
-import { addProduct, deleteProduct, fetchProductsFailure, fetchProductsRequest, fetchProductsSuccess, Product } from './productsSlice';
+import axiosApi from '../../axiosApi';
+import { AppDispatch } from '..';
+import { fetchProductsRequest, Product, fetchProductsSuccess, fetchProductsFailure, addProduct, deleteProduct } from '../reducers/productsSlice';
 
 export const fetchProductsAsync = () => async (dispatch: AppDispatch) => {
     dispatch(fetchProductsRequest());

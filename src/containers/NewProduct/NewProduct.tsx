@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import ProductForm from '../../components/ProductForm/ProductForm';
 import { AppDispatch } from '../../store';
-import { createProductAsync } from '../../store/productsAction';
+import { createProductAsync } from '../../store/actions/productsAction';
 
 const NewProduct = () => {
     const dispatch = useDispatch<AppDispatch>();

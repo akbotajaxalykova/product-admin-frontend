@@ -1,9 +1,19 @@
-import { CircularProgress, Typography } from '@mui/material';
-import Box from '@mui/material/Box';
+import {
+  Box,
+  Card,
+  CardContent,
+  CardHeader,
+  CardMedia,
+  CircularProgress,
+  Container,
+  Typography,
+} from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import defaultImage from '../../assets/defaultImage.avif';
 import axiosApi from '../../axiosApi';
-import { Product } from '../../store/productsSlice';
+import { apiURL } from '../../constants';
+import { Product } from '../../store/reducers/productsSlice';
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -17,36 +27,59 @@ const ProductDetails = () => {
         const response = await axiosApi.get<Product>(`/products/${id}`);
         setProduct(response.data);
       } catch (error: unknown) {
-        console.error('Error fetch product', error);
+        console.error('Error fetching product', error);
       } finally {
         setIsLoading(false);
       }
     };
     fetchProduct();
   }, [id]);
-if (isLoading){
+
+  const cardImage = product?.image ? `${apiURL}/uploads/${product.image}` : defaultImage;
+
+  if (isLoading) {
     return (
-        <Box textAlign='center' mt ={4}>
-            <CircularProgress/>
-        </Box>
+      <Box textAlign='center' mt={6}>
+        <CircularProgress />
+      </Box>
     );
-}
-console.log(product);
+  }
 
   return (
-    <Box mt={4}>
-      {product && (
-        <>
-          <Typography variant='h4'>{product.title}</Typography>
-          <Typography variant='body1' mt={2}>
-            {product.price} KZT
-          </Typography>
-          <Typography variant='body2' mt={1}>
-            {product.description}
-          </Typography>
-        </>
-      )}
-    </Box>
+    <Container maxWidth='sm'>
+      <Box mt={6}>
+        {product && (
+          <Card sx={{ borderRadius: 3, boxShadow: 5 }}>
+            <CardHeader
+              title={product.title}
+              titleTypographyProps={{ variant: 'h5', fontWeight: 'bold' }}
+              sx={{ textAlign: 'center', paddingBottom: 0 }}
+            />
+
+            <CardMedia
+              image={cardImage}
+              title={product.title}
+              sx={{
+                height: 0,
+                paddingTop: '56.25%', // 16:9
+                backgroundSize: 'contain',
+                backgroundPosition: 'center',
+                marginY: 2,
+              }}
+            />
+
+            <CardContent>
+              <Typography variant='h6' gutterBottom>
+                Price: <strong>{product.price} KZT</strong>
+              </Typography>
+              <Typography variant='body1' color='text.secondary'>
+                {product.description}
+              </Typography>
+            </CardContent>
+          </Card>
+        )}
+      </Box>
+    </Container>
   );
 };
 
