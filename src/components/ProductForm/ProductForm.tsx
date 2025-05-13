@@ -1,22 +1,29 @@
-import { Button } from '@mui/material';
+import { Button, MenuItem } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import { ChangeEvent, FormEvent, useState } from 'react';
 import FileInput from '../UI/Form/FileInput';
 
+
+export interface Category {
+    _id:string;
+    title:string;
+}
 const RootForm = styled('form')(({ theme }) => ({
     marginTop: theme.spacing(2),
 }));
 
 interface ProductFormProps {
     onSubmit: (productData: FormData) => void;
+    categories: Category[]
 }
 
-const ProductForm: React.FC<ProductFormProps> = ({ onSubmit }) => {
+const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, categories }) => {
     const [state, setState] = useState({
         title: '',
         price: '',
+        category: '',
         description: '',
         image: null,
     });
@@ -26,6 +33,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit }) => {
         const formData = new FormData();
         formData.append('title', state.title);
         formData.append('price', state.price);
+        formData.append('category', state.category);
         formData.append('description', state.description);
         if (state.image) {
             formData.append('image', state.image);
@@ -86,6 +94,28 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit }) => {
                 />
             </Grid>
 
+            <Grid size={{ xs: 12 }}>
+                <TextField
+                    select
+                    fullWidth
+                    variant='outlined'
+                    id='category'
+                    label='Category'
+                    value={state.category}
+                    onChange={inputChangeHandler}
+                    name='category'
+                >
+
+                    {
+                        categories?.map(c=>
+                            <MenuItem key={c._id} value={c._id}>
+                            {c.title}
+                            </MenuItem>
+                        )
+                    }
+                </TextField>
+
+            </Grid>
             <Grid>
                 <FileInput label='Image' name='image' onChange={fileChangeHandler} />
             </Grid>
